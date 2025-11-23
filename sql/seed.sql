@@ -19,10 +19,10 @@ BEGIN
 
   DELETE FROM ticket;
   DELETE FROM customer;
-  DELETE FROM showtime;
   DELETE FROM seat;
-  DELETE FROM auditorium;
+  DELETE FROM showtime;
   DELETE FROM movie;
+  DELETE FROM auditorium;
   DELETE FROM theatre;
 
   -- 3 theatres
