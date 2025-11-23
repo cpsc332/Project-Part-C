@@ -1,0 +1,73 @@
+CREATE DATABASE theatre_booking;
+USE theatre_booking;
+
+
+CREATE TABLE IF NOT EXISTS theatre (
+    TheatreID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(256) NOT NULL,
+    Street VARCHAR(256) NOT NULL,
+    City VARCHAR(256) NOT NULL,
+    State CHAR(2) NOT NULL,
+    ZipCode VARCHAR(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS auditorium (
+    AuditoriumID INT PRIMARY KEY AUTO_INCREMENT,
+    TheatreID INT NOT NULL,
+    Name VARCHAR(64) NOT NULL,
+    RowCount INT NOT NULL,
+    SeatCount INT NOT NULL,
+    CONSTRAINT FK_tAud FOREIGN KEY (TheatreID) REFERENCES theatre(TheatreID) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS seat (
+    SeatID INT PRIMARY KEY AUTO_INCREMENT,
+    AuditoriumID INT NOT NULL,
+    RowNumber INT NOT NULL,
+    SeatNumber INT NOT NULL,
+    SeatType ENUM('standard', 'premium', 'ada') NOT NULL,
+    CONSTRAINT FK_aSeat FOREIGN KEY (AuditoriumID) REFERENCES auditorium(AuditoriumID) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS movie (
+    MovieID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(128) NOT NULL,
+    Runtime INT NOT NULL,
+    MPAA ENUM('g', 'pg', 'pg13', 'r', 'nc17') NOT NULL,
+    ReleaseDate DATE NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS showtime (
+    ShowtimeID INT PRIMARY KEY AUTO_INCREMENT,
+    MovieID INT NOT NULL,
+    AuditoriumID INT NOT NULL,
+    StartTime DATETIME NOT NULL,
+    Format ENUM('2d', '3d', 'imax') NOT NULL,
+    Language ENUM('sub', 'dub') NOT NULL,
+    BasePrice DECIMAL(6,2) NOT NULL,
+    CONSTRAINT FK_movieShowing FOREIGN KEY (MovieID) REFERENCES movie(MovieID) ON DELETE RESTRICT,
+    CONSTRAINT FK_inAuditorium FOREIGN KEY (AuditoriumID) REFERENCES auditorium(AuditoriumID) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS customer (
+    CustomerID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(128) NOT NULL,
+    Email VARCHAR(64) NOT NULL,
+    GuestFlag BOOLEAN NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS ticket (
+    TicketID INT PRIMARY KEY AUTO_INCREMENT,
+    ShowtimeID INT NOT NULL,
+    SeatID INT NOT NULL,
+    CustomerID INT NOT NULL,
+    Price DECIMAL(6,2) NOT NULL,
+    DiscountType VARCHAR(128),
+    Status ENUM('reserved', 'purchased', 'refunded', 'used') NOT NULL,
+    CONSTRAINT FK_toShowtime FOREIGN KEY (ShowtimeID) REFERENCES showtime(ShowtimeID) ON DELETE RESTRICT,
+    CONSTRAINT FK_ownsSeat FOREIGN KEY (SeatID) REFERENCES seat(SeatID) ON DELETE RESTRICT,
+    CONSTRAINT FK_ticketOwner FOREIGN KEY (CustomerID) REFERENCES customer(CustomerID) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
