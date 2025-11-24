@@ -16,6 +16,12 @@ BEGIN
   DECLARE aud_id INT;
   DECLARE st_id INT;
   DECLARE cust_id INT;
+  DECLARE thNum INT;
+  DECLARE audNum INT;
+  DECLARE movNum INT;
+  DECLARE stNum INT;
+  DECLARE seatNum INT;
+  DECLARE cusNum INT;
 
   DELETE FROM ticket;
   DELETE FROM customer;
@@ -32,30 +38,35 @@ BEGIN
     ('Irvine Spectrum',  '31 Spectrum Center Dr', 'Irvine', 'CA', '92618');
 
   -- 10 auditoriums with different sizes
+  
+  SET thNum = (SELECT MIN(theatreid) FROM theatre);
+  SELECT thNum;
   INSERT INTO auditorium (theatreid, name, rowcount, seatcount) VALUES
-    (1, 'Auditorium 1',  8,  96),   -- 8 x 12
-    (1, 'Auditorium 2', 10, 160),   -- 10 x 16
-    (1, 'Auditorium 3', 12, 240),   -- 12 x 20
-    (2, 'Auditorium 4',  8,  96),
-    (2, 'Auditorium 5', 10, 160),
-    (2, 'Auditorium 6', 12, 240),
-    (3, 'Auditorium 7',  8,  96),
-    (3, 'Auditorium 8', 10, 160),
-    (3, 'Auditorium 9', 12, 240),
-    (3, 'Auditorium 10', 8, 96);
+    (thNum, 'Auditorium 1',  8,  96),   -- 8 x 12
+    (thNum, 'Auditorium 2', 10, 160),   -- 10 x 16
+    (thNum, 'Auditorium 3', 12, 240),   -- 12 x 20
+    (thNum + 1, 'Auditorium 4',  8,  96),
+    (thNum + 1, 'Auditorium 5', 10, 160),
+    (thNum + 1, 'Auditorium 6', 12, 240),
+    (thNum + 2, 'Auditorium 7',  8,  96),
+    (thNum + 2, 'Auditorium 8', 10, 160),
+    (thNum + 2, 'Auditorium 9', 12, 240),
+    (thNum + 2, 'Auditorium 10', 8, 96);
 
+  SET audNum = (SELECT MIN(auditoriumid) FROM auditorium);
+  SELECT audNum;
   SET i = 1;
   WHILE i <= 10 DO
     IF i = 1 THEN
-      SET aud_id  = 1; 
+      SET aud_id  = audNum; 
       SET row_cnt = 8;
       SET col_cnt = 12;
     ELSEIF i = 2 THEN
-      SET aud_id  = 2;
+      SET aud_id  = 1 + audNum;
       SET row_cnt = 10;
       SET col_cnt = 16;
     ELSE
-      SET aud_id  = 3;
+      SET aud_id  = 2 + audNum;
       SET row_cnt = 12;
       SET col_cnt = 20;
     END IF;
@@ -64,6 +75,7 @@ BEGIN
     WHILE j <= row_cnt DO
       SET k = 1;
       WHILE k <= col_cnt DO
+      SELECT i, j, k, row_cnt;
         INSERT INTO seat (auditoriumid, rownumber, seatnumber, seattype)
         VALUES (
           aud_id,
@@ -84,7 +96,7 @@ BEGIN
   END WHILE;
 
   -- 12 movies
-  INSERT INTO movie (name, runtimeminutes, mpaa, releasedate) VALUES
+  INSERT INTO movie (name, runtime, mpaa, releasedate) VALUES
     ('Spirited Away',          125, 'pg',   '2001-07-20'),
     ('Inception',              148, 'pg13', '2010-07-16'),
     ('The Dark Knight',        152, 'pg13', '2008-07-18'),
@@ -100,11 +112,13 @@ BEGIN
 
   -- 80 showtimes over a range of days, rotating movies & auditoriums
   SET i = 1;
+  SET movNum = (SELECT MIN(movieid) FROM movie);
   WHILE i <= 80 DO
+    SELECT (movNum + MOD(i-1, 12)), (audNum + MOD(i-1, 10));
     INSERT INTO showtime (movieid, auditoriumid, starttime, format, language, baseprice)
     VALUES (
-      1 + MOD(i-1, 12),                 -- movie 1..12
-      1 + MOD(i-1, 10),                 -- auditorium 1..10
+      movNum + MOD(i-1, 12),                 -- movie 1..12
+      audNum + MOD(i-1, 10),                 -- auditorium 1..10
       DATE_ADD(
         DATE_ADD('2025-10-20 12:00:00',
                INTERVAL FLOOR((i-1)/10) DAY),
@@ -136,16 +150,19 @@ BEGIN
   END WHILE;
 
   -- 400 tickets: 5 tickets per showtime for first 80 showtimes
+  SET cusNum = (SELECT MIN(customerid) FROM customer);
+  SET stNum = (SELECT MIN(showtimeid) FROM showtime);
+  SET seatNum = (SELECT MIN(seatid) FROM seat);
   SET i = 1;                -- showtime counter
   WHILE i <= 80 DO
     SET j = 1;
     WHILE j <= 5 DO         -- 5 * 80 = 400 tickets
-      SET cust_id = 1 + MOD((i-1)*5 + j - 1, 60);
+      SET cust_id = MOD((i-1)*5 + j - 1, 60)+cusNum;
 
       INSERT INTO ticket (showtimeid, seatid, customerid, price, discounttype, status)
       VALUES (
-        i,
-        1 + MOD((i-1)*5 + j - 1, 500),
+        i+stNum-1,
+        MOD((i-1)*5 + j - 1, 500)+seatNum,
         cust_id,
         15.00,
         CASE MOD(j,3)
