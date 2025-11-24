@@ -24,19 +24,19 @@ In order to use this project, you will need:
   - Script that creates views, triggers, and the ticket selling procedure
   - Backup script that creates a full clone of the main tables
 
-You can name these files anything you and your group would like. This README will refer to them generally as:
-- `ddl.sql`
+You can name these files anything you and your group would like. This README will refer to them as:
+- `schema.sql`
 - `seed.sql`
-- `views_triggers_procs.sql`
+- `logic.sql`
 - `backup.sql`
 
 ## 3. Database Setup
 
 Your first step is to create the database and select it to use. For example: `CREATE DATABASE theatre_booking` and `USE theatre_booking`. All of these SQL scripts presumes you are in this database.
 
-### 3.1 Run the DDL script tables and constraints
+### Run the DDL script tables and constraints
 
-Then you will run your DDL script. For example `ddl.sql`. The script should include:
+Then you will run your DDL script. For example `schema.sql`. The script should include:
 
 Create all base tables:
 - Theatre
@@ -49,7 +49,7 @@ Create all base tables:
 
 The DDL also defines primary keys, foreign keys, and ENUM columns to match the relational schema from Part A.
 
-### 3.2 Execute the DML seed script
+### Execute the DML seed script
 
 Next execute the DML seed script, that defines and calls the procedure `seed_demo_data` with the following behavior:
 
@@ -64,9 +64,9 @@ Next execute the DML seed script, that defines and calls the procedure `seed_dem
 
 After the first call to `seed_demo_data`, the script drops that procedure from the database.
 
-### 3.3 Create Views, Triggers, and a Stored Procedure
+### Create Views, Triggers, and a Stored Procedure
 
-Following the execution of the seed script, execute the script that creates the views, triggers, and stored procedure related to ticket sales (for example, `Views_triggers_procs.sql`). This script assumes that you have already executed `USE theatre_booking`.
+Following the execution of the seed script, execute the script that creates the views, triggers, and stored procedure related to ticket sales. This script assumes that you have already executed `USE theatre_booking`.
 
 The views created here are:
 
@@ -99,7 +99,7 @@ After the ticket has been updated, if the status has changed to REFUNDED, it add
 - If the discount_code is not null, apply extra discount for STUDENT, SENIOR, CHILD, etc.
 - Inserts a new row ticket row with an updated status of PURCHASED, the final price, and returns the new TicketID in the OUT parameter.
 
-### 3.4 Execute the backup script
+### Execute the backup script
 
 Finally, run the backup script which is the `backup.sql` for our program. The script defines a stored procedure called `backup_full_clone` which:
 - Builds a prefix for the backup table name, which begins with `back_` and includes the current date.
@@ -119,7 +119,7 @@ This creates a snapshot copy of all core tables and is used as a demonstration o
 
 To demonstrate the database has been loaded correctly and the features of Part B of this project are functional, the following sample queries can be used.
 
-### 4.1 Basic row count checks
+### Basic row count checks
 
 These queries confirm the seed script had inserted the appropriate amount of data:
 
@@ -135,7 +135,7 @@ SELECT COUNT(*) FROM ticket;
 
 The counts should meet the project requirements: 3 theatres, 10 auditoriums, full seat maps, 12 movies, 80 showtimes, 60 customers, 400 tickets.
 
-### 4.2 Checking Views
+### Checking Views
 
 Here are some examples of how to query the views:
 
@@ -158,7 +158,7 @@ FROM vw_theatre_utilization_next_7_days
 ORDER BY start_time;
 ```
 
-### 4.3 Checking Stored Procedures and Triggers
+### Checking Stored Procedures and Triggers
 
 To verify `sell_ticket` and the triggers:
 
@@ -195,7 +195,7 @@ SELECT * FROM ticket_audit WHERE ticket_id = @new_ticket_id;
 
 You should now see an additional audit row with the action 'REFUND'.
 
-### 4.4 Verifying the backup procedure
+### Verifying the backup procedure
 
 ```sql
 CALL backup_full_clone;
