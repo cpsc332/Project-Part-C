@@ -5,8 +5,8 @@ check:
 
 setup-codespace:
 	sudo apt update
-	sudo apt install mysql-server mysql-client
-	sudo service mysql start
+	sudo apt install mariadb-server mariadb-client
+	sudo service mariadb start
 	sudo apt install php-mysql
 	export PATH=/usr/bin:$PATH
 	php -m | grep mysql
