@@ -1,12 +1,12 @@
 <?php
-session_start();
-require_once '../includes/db.php';
-require_once '../includes/functions.php';
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: showtimes.php");
     exit();
 }
+
+session_start();
+require_once '../includes/db.php';
+require_once '../includes/functions.php';
 
 $csrf_token = param('csrf_token', '', 'POST');
 if (!check_token($csrf_token)) {
