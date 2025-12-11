@@ -231,7 +231,7 @@ body { font-family: Arial, sans-serif; background: #f4f4f4; }
                                     <div class="ticket-actions">
                                         <form method="POST" action="refund.php">
                                             <input type="hidden" name="ticket_id" value="<?php echo esc($ticket['ticketid']); ?>">
-                                            <input type="hidden" name="csrf_token" value="<?php echo csrf_token(''); ?>">
+                                            <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
                                             <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to refund this ticket?');">Request Refund</button>
                                         </form>
                                     </div>
