@@ -143,10 +143,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title><?php echo esc(t('register_heading')); ?></title>
+        <link rel="stylesheet" href="assets/styles.css">
+
 </head>
 <body>
 
-<?php include __DIR__ . '/../includes/header.php'; ?>
+<?php include __DIR__ . '/../includes/header.php'; 
+echo theatre_header();
+?>
 
 <h1><?php echo esc(t('register_heading')); ?></h1>
 
@@ -155,24 +159,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php endif; ?>
 
 <form method="post" action="register.php">
-    <div>
-        <label class="form-group">Name:</label>
+    <div class="form-group">
+        <label>Name:</label>
         <input type="text" name="name" required value="<?php echo isset($name) ? esc($name) : ''; ?>">
     </div>
-    <div>
-        <label class="form-group">Email:</label>
+    <div class="form-group">
+        <label> Email:</label>
         <input type="email" name="email" required value="<?php echo isset($email) ? esc($email) : ''; ?>">
     </div>
-    <div>
-        <label class="form-group">Password:</label>
+    <div class="form-group">
+        <label>Password:</label>
         <input type="password" name="password" required>
     </div>
-    <div>
-        <label class="form-group">Confirm Password:</label>
+    <div class="form-group">
+        <label>Confirm Password:</label>
         <input type="password" name="confirm" required>
     </div>
     <button type="submit">Register</button>
 </form>
 
+<?php include __DIR__ . '/../includes/footer.php'; 
+echo theatre_footer();
+?>
 </body>
 </html>

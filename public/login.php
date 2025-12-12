@@ -127,10 +127,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title><?php echo esc(t('login_heading')); ?></title>
+        <link rel="stylesheet" href="assets/styles.css">
+
 </head>
 <body>
 
-<?php include __DIR__ . '/../includes/header.php'; ?>
+<?php include __DIR__ . '/../includes/header.php'; 
+echo theatre_header();
+?>
 
 <h1><?php echo esc(t('login_heading')); ?></h1>
 
@@ -139,16 +143,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php endif; ?>
 
 <form method="post" action="login.php">
-    <div>
-        <label class="form-group">Email:</label>
+    <div class="form-group">
+        <label>Email:</label>
         <input type="email" name="email" required>
     </div>
-    <div>
-        <label class="form-group">Password:</label>
+    <div class="form-group">
+        <label>Password:</label>
         <input type="password" name="password" required>
     </div>
     <button type="submit">Log in</button>
 </form>
+<?php include __DIR__ . '/../includes/footer.php';
+echo theatre_footer();
+?>
 
 </body>
 </html>

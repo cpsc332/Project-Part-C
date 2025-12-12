@@ -24,6 +24,8 @@ foreach ($tables as $table) {
     /* General page style */
     body {
         font-family: Arial, sans-serif;
+        padding: 50px;
+
     }
 
     button { 
@@ -33,7 +35,6 @@ foreach ($tables as $table) {
         border: none; 
         border-radius: 4px; 
         cursor: pointer; 
-        padding: 50px;
     }
 
     /* Navigation links */

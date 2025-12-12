@@ -350,6 +350,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && param('confirm_purchase', '', 'POST
 
         <button type="submit">Confirm Purchase</button>
     </form>
+    <?php include __DIR__ . '/../includes/footer.php'; 
+    echo theatre_footer();
+    ?>
 
 <?php endif; ?>
 
