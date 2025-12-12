@@ -127,12 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title><?php echo esc(t('login_heading')); ?></title>
-    <link rel="stylesheet" href="assets/styles.css">
+        <link rel="stylesheet" href="assets/styles.css">
 
 </head>
 <body>
 
-<?php include __DIR__ . '/../includes/header.php';
+<?php include __DIR__ . '/../includes/header.php'; 
 echo theatre_header();
 ?>
 
@@ -156,5 +156,6 @@ echo theatre_header();
 <?php include __DIR__ . '/../includes/footer.php';
 echo theatre_footer();
 ?>
+
 </body>
 </html>

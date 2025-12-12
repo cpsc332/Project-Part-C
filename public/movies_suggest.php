@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 require_once __DIR__ . '/../includes/init.php';
 
 header('Content-Type: application/json');
@@ -25,7 +22,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $result = [];
 foreach ($rows as $r) {
     $result[] = [
-        'id'   => (int) $r['MovieID'],
+        'id'   => (int)$r['MovieID'],
         'name' => $r['Name'],
     ];
 }

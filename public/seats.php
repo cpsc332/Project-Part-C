@@ -196,7 +196,7 @@ echo theatre_header();
         <p><strong>Total:</strong> $<span id="total-price">0.00</span></p>
 
         <form id="checkout-form" method="POST" action="purchasee.php">
-            <input type="hidden" name="showtime_id" value="<?php echo (int) $showtime_id; ?>">
+            <input type="hidden" name="showtime_id" value="<?php echo (int)$showtime_id; ?>">
             <input type="hidden" name="seats" id="seats-input" value="">
             <button type="submit" id="checkout-btn" class="checkout-btn" disabled>Proceed to Checkout</button>
         </form>

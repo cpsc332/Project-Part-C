@@ -31,12 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':hash' => $hash,
             ]);
 
-            $id = (int) $pdo->lastInsertId();
+            $id = (int)$pdo->lastInsertId();
             $userRow = [
                 'CustomerID'  => $id,
                 'Name'        => $name,
                 'Email'       => $email,
-                'PasswordHash' => $hash,
+                'PasswordHash'=> $hash,
                 'Role'        => 'customer',
             ];
             login_user($userRow);
@@ -143,11 +143,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title><?php echo esc(t('register_heading')); ?></title>
-    <link rel="stylesheet" href="assets/styles.css">
+        <link rel="stylesheet" href="assets/styles.css">
+
 </head>
 <body>
 
-<?php include __DIR__ . '/../includes/header.php';
+<?php include __DIR__ . '/../includes/header.php'; 
 echo theatre_header();
 ?>
 
@@ -163,7 +164,7 @@ echo theatre_header();
         <input type="text" name="name" required value="<?php echo isset($name) ? esc($name) : ''; ?>">
     </div>
     <div class="form-group">
-        <label>Email:</label>
+        <label> Email:</label>
         <input type="email" name="email" required value="<?php echo isset($email) ? esc($email) : ''; ?>">
     </div>
     <div class="form-group">
@@ -176,7 +177,8 @@ echo theatre_header();
     </div>
     <button type="submit">Register</button>
 </form>
-<?php include __DIR__ . '/../includes/footer.php';
+
+<?php include __DIR__ . '/../includes/footer.php'; 
 echo theatre_footer();
 ?>
 </body>

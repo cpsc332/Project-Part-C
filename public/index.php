@@ -25,6 +25,7 @@ foreach ($tables as $table) {
     body {
         font-family: Arial, sans-serif;
         padding: 50px;
+
     }
 
     button {
@@ -107,8 +108,8 @@ foreach ($tables as $table) {
 <body>
     <?php
         require_once __DIR__ . '/../includes/header.php';
-echo theatre_header();
-?>
+        echo theatre_header();
+    ?>
 
 <!-- <h1>Welcome to Theatre Booking System</h1> -->
 
